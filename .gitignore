@@ -1,1 +1,14 @@
+# Environment files containing credentials
 .env
+
+# Generated configuration file containing credentials  
+WOL_ESP32/config.h
+
+# Arduino IDE files
+*.hex
+*.elf
+*.bin
+
+# Python cache
+__pycache__/
+*.pyc
