@@ -22,6 +22,7 @@ This project provides a comprehensive remote PC management solution using an ESP
   - User inactivity monitoring
 - **Configurable Sleep Timer**: Customizable delay before sleep check
 - **Safe Sleep Mode**: Only sleeps when no active user is detected
+- **Remote Command Execution**: Execute command-line commands via Telegram (optional)
 
 ## 📋 Configuration
 
@@ -45,6 +46,7 @@ MAC_ADDRESS=YourPCMacAddress
 
 # PowerShell Script Configuration
 SLEEP_TIME=30  # Time in seconds to wait before checking if PC should sleep (default: 30)
+ENABLE_COMMAND_LISTENER=false  # Set to "true" to enable remote command execution via Telegram (default: false)
 ```
 
 ### Setup Instructions
@@ -137,7 +139,40 @@ powershell.exe -ExecutionPolicy Bypass -File "StartupSleep.ps1"
    - Desktop lock status
    - Screen saver activity
 4. **Smart Sleep**: Only sleeps if no user activity detected
-5. **Notifications**: Sends appropriate Telegram messages
+5. **Command Listener**: If enabled, listens for Telegram commands (when PC stays awake)
+6. **Notifications**: Sends appropriate Telegram messages
+
+### Remote Command Execution (Optional)
+
+When `ENABLE_COMMAND_LISTENER=true` in your `.env` file, you can execute commands remotely:
+
+#### Available Commands
+
+- **/cmd [command]** - Execute any command-line command
+- **/help** - Show help message with available commands
+
+#### Command Examples
+
+```
+/cmd dir C:\
+/cmd Get-Process | Select-Object -First 5
+/cmd systeminfo
+/cmd ipconfig /all
+/cmd Get-Service | Where-Object {$_.Status -eq "Running"}
+```
+
+#### Security Considerations
+
+⚠️ **IMPORTANT SECURITY NOTES**:
+- Commands run with the same privileges as the PowerShell script
+- Only enable this feature if you trust your Telegram bot security
+- Avoid commands that require user input or might hang
+- Output is limited to 4000 characters to prevent Telegram message limits
+- Consider the security implications of remote command execution
+
+#### Disabling Command Execution
+
+Set `ENABLE_COMMAND_LISTENER=false` (or remove the line) in your `.env` file to disable this feature.
 
 ## 📁 Project Structure
 
@@ -256,6 +291,9 @@ Modify `WOL_ESP32.ino` to add:
 - **No notifications**: Verify Telegram bot token and chat ID
 - **PC doesn't sleep**: Check if user sessions are properly detected
 - **PC doesn't auto-start after power outage**: Verify AC Recovery/AC Power Loss is set to "Power On" in BIOS
+- **Command execution not working**: Ensure `ENABLE_COMMAND_LISTENER=true` in `.env` file
+- **Commands hang or timeout**: Avoid interactive commands or those requiring user input
+- **Permission errors**: Commands run with script privileges; may need elevated permissions for system commands
 
 ### Configuration Issues
 - **config.h not generated**: Ensure Python is installed and run `generate_config.py`
