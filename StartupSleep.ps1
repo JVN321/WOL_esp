@@ -16,6 +16,7 @@ if (Test-Path $envFile) {
 # Set your bot token and chat ID from environment variables
 $botToken = $BOT_TOKEN
 $chatId = $CHAT_ID
+$sleepTime = if ($SLEEP_TIME) { [int]$SLEEP_TIME } else { 30 }  # Default to 30 seconds if not specified
 $message = "🔥PC turned on"
 
 # Telegram API URL
@@ -30,8 +31,8 @@ $body = @{
 # Send the message
 Invoke-RestMethod -Uri $uri -Method Post -Body $body
 
-# Wait for 5 minutes (300 seconds)
-Start-Sleep -Seconds 30
+# Wait for specified time (default 30 seconds)
+Start-Sleep -Seconds $sleepTime
 
 # Check if any user is logged in (not on lock screen)
 $activeSession = quser 2>$null | Where-Object { $_ -match "Active" -and $_ -notmatch "Disc" }

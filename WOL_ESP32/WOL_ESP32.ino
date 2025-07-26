@@ -21,7 +21,7 @@ String lastUpdateId = "";
 byte mac[] = MAC_ADDRESS;
 
 // Telegram polling interval
-unsigned long telegramInterval = 3000;
+unsigned long telegramInterval = 10000;
 unsigned long lastTelegramPoll = 0;
 
 void setup() {
