@@ -109,18 +109,34 @@ Or check in Network adapter properties.
 1. Open Task Scheduler (Run: `taskschd.msc`)
 2. Create Basic Task
 3. Set trigger to "When the computer starts"
-4. Set action to start `powershell.exe` with arguments:
-   ```
-   -ExecutionPolicy Bypass -File "C:\path\to\StartupSleep.ps1"
-   ```
+4. Set action to start a program:
+   
+   **Option A - Visible PowerShell Window:**
+   - Program: `powershell.exe`
+   - Arguments: `-ExecutionPolicy Bypass -File "C:\path\to\StartupSleep.ps1"`
+   
+   **Option B - Hidden (No Window):**
+   - Program: `wscript.exe`
+   - Arguments: `"C:\path\to\StartupSleep_Silent.vbs"`
 
 **Method 2: Startup Folder**
 1. Press `Win+R`, type `shell:startup`
-2. Create a batch file with:
+2. Choose one of these options:
+   
+   **Option A - Create a batch file:**
    ```bat
    @echo off
    powershell.exe -ExecutionPolicy Bypass -File "C:\path\to\StartupSleep.ps1"
    ```
+   
+   **Option B - Copy the hidden launcher:**
+   - Copy `StartupSleep_Silent.vbs` to the startup folder for silent execution
+
+**Method 3: Hidden Execution (Recommended)**
+- **Double-click `StartupSleep_Silent.vbs`** to run the script completely hidden
+- **No terminal window** - Script runs silently in background
+- **No taskbar icon** - Completely invisible execution
+- **Automatic path detection** - Works from any location
 
 #### Manual Execution
 
@@ -183,6 +199,7 @@ WOL_esp/
 ├── generate_config.py     # Python script to generate config.h
 ├── update_config.bat      # Windows batch file to update configuration
 ├── StartupSleep.ps1       # PowerShell auto-sleep script
+├── StartupSleep_Silent.vbs  # VBScript launcher for silent execution
 └── WOL_ESP32/
     ├── config.h          # Auto-generated header file (don't edit manually)
     └── WOL_ESP32.ino     # Main Arduino sketch
@@ -201,6 +218,7 @@ WOL_esp/
 
 #### Auto-Sleep System
 - **`StartupSleep.ps1`** - PowerShell script for automatic PC sleep management with Telegram integration
+- **`StartupSleep_Silent.vbs`** - VBScript launcher to run PowerShell script silently (no visible window)
 
 ## ⚙️ Hardware Requirements & BIOS Setup
 
